@@ -3,11 +3,12 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Employee = require("../models/Employee");
+const { authLimiter } = require("../middleware/rateLimiter");
 
 const router = express.Router();
 
 // Employee Login API
-router.post("/EmpLogin", async (req, res) => {
+router.post("/EmpLogin", authLimiter, async (req, res) => {
   try {
     const { ls_EmpCode, ls_Password } = req.body;
 
@@ -21,9 +22,9 @@ router.post("/EmpLogin", async (req, res) => {
       return res.status(400).json({ error: "Invalid Password" });
     }
 
-    // JWT token
+    // JWT token with improved expiration
     const token = jwt.sign({ id: emp._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "8h", // Extended from 1h to 8h for better UX
     });
 
     res.json({
@@ -127,7 +128,7 @@ router.post("/register", async (req, res) => {
 });
 
 // User Login
-router.post("/login", async (req, res) => {
+router.post("/login", authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -165,7 +166,7 @@ router.post("/login", async (req, res) => {
 });
 
 // Admin Login (special endpoint)
-router.post("/admin/login", async (req, res) => {
+router.post("/admin/login", authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 

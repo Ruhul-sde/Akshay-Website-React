@@ -6,31 +6,31 @@ import Footer from './components/Footer';
 import ChatWidget from './components/ChatWidget';
 
 // SAP Pages
-import SapBusinessOne from './pages/SapBusinessOne';
-import SapImplementation from './pages/SapImplementation';
-import SapSupport from './pages/SapSupport';
-import SapAddOns from './pages/SapAddOns';
-import SapS4Hana from './pages/SapS4Hana';
-import GrowWithSap from './pages/GrowWithSap';
-import RiseWithSap from './pages/RiseWithSap';
-import EInvoicing from './pages/EInvoicing';
-import SapCaseStudies from './pages/SapCaseStudies';
+import SapBusinessOne from './pages/sap/SapBusinessOne';
+import SapImplementation from './pages/sap/SapImplementation';
+import SapSupport from './pages/sap/SapSupport';
+import SapAddOns from './pages/sap/SapAddOns';
+import SapS4Hana from './pages/sap/SapS4Hana';
+import GrowWithSap from './pages/sap/GrowWithSap';
+import RiseWithSap from './pages/sap/RiseWithSap';
+import EInvoicing from './pages/sap/EInvoicing';
+import SapCaseStudies from './pages/sap/SapCaseStudies';
 
 // Staffing Pages
-import ItStaffing from './pages/ItStaffing';
-import PayrollManagement from './pages/PayrollManagement';
+import ItStaffing from './pages/Staffing/ItStaffing';
+import PayrollManagement from './pages/Staffing/PayrollManagement';
 
 // Cloud Pages
 import CloudHosting from './pages/CloudHosting';
 
 // AI Pages
-import AkshayIntelligence from './pages/AkshayIntelligence';
-import AiDigitalMarketing from './pages/AiDigitalMarketing';
-import AiInsideSales from './pages/AiInsideSales';
+import AkshayIntelligence from './pages/Artificial Intelligence/AkshayIntelligence';
+import AiDigitalMarketing from './pages/Artificial Intelligence/AiDigitalMarketing';
+import AiInsideSales from './pages/Artificial Intelligence/AiInsideSales';
 
 // ERP Pages
-import CrestErp from './pages/CrestErp';
-import ErpCaseStudies from './pages/ErpCaseStudies';
+import CrestErp from './pages/ERP/CrestErp';
+import ErpCaseStudies from './pages/ERP/ErpCaseStudies';
 import ContactUs from './pages/ContactUs';
 import AboutUs from './pages/AboutUs';
 import Blog from './pages/Blog';

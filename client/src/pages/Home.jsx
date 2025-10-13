@@ -10,13 +10,26 @@ import ClientTestimonials from '../components/ClientTestimonials';
 
 export default function Home() {
   return (
-    <div>
+    <div className="w-full overflow-x-hidden">
+      {/* Hero Section */}
       <Hero />
+      
+      {/* Trusted Companies Section */}
       <TrustedCompanies />
+      
+      {/* About Company Section - "Powering Growth with Our People" */}
       <AboutCompany />
+      
+      {/* Services Cards Section */}
       <ServicesCards />
+      
+      {/* Why Choose Us Section */}
       <WhyChooseUs />
+      
+      {/* Statistics Section */}
       <Statistics />
+      
+      {/* Client Testimonials & Success Stories */}
       <ClientTestimonials />
     </div>
   );

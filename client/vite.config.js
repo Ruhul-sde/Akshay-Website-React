@@ -8,10 +8,15 @@ export default defineConfig({
     tailwindcss(),
   ],
   server: {
+    host: '0.0.0.0',
+    port: 5000,
+    hmr: {
+      clientPort: 5000
+    },
     proxy: {
       // Proxy API requests to the backend
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:3001',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

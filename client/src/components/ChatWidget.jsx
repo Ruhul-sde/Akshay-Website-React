@@ -1,18 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+const API_URL = '/api/chat';
+
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: "Hello! I'm here to help. How can I assist you with Akshay Software Technologies and its Services?",
-      sender: 'bot',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [sessionId, setSessionId] = useState(null);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -27,36 +23,99 @@ export default function ChatWidget() {
     }
   }, [messages, isOpen]);
 
-  const handleSendMessage = () => {
+  // Initialize chat session
+  useEffect(() => {
+    const initSession = async () => {
+      try {
+        const savedSessionId = localStorage.getItem('chatSessionId');
+        const response = await fetch(`${API_URL}/session`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: savedSessionId })
+        });
+        
+        const data = await response.json();
+        setSessionId(data.sessionId);
+        localStorage.setItem('chatSessionId', data.sessionId);
+        
+        if (data.messages && data.messages.length > 0) {
+          setMessages(data.messages.map(msg => ({
+            id: Date.now() + Math.random(),
+            text: msg.text,
+            sender: msg.sender,
+            timestamp: new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          })));
+        }
+      } catch (error) {
+        console.error('Failed to initialize chat session:', error);
+        // Add fallback welcome message
+        setMessages([{
+          id: 1,
+          text: "Hello! I'm here to help. How can I assist you with Akshay Software Technologies and its Services?",
+          sender: 'bot',
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }]);
+      }
+    };
+    
+    initSession();
+  }, []);
+
+  const handleSendMessage = async () => {
     if (inputMessage.trim() === '') return;
 
+    const userMessageText = inputMessage;
     const newMessage = {
-      id: messages.length + 1,
-      text: inputMessage,
+      id: Date.now(),
+      text: userMessageText,
       sender: 'user',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 
-    setMessages([...messages, newMessage]);
+    setMessages(prev => [...prev, newMessage]);
     setInputMessage('');
     setIsTyping(true);
 
-    // Simulate bot response
-    setTimeout(() => {
-      const botResponse = {
-        id: messages.length + 2,
-        text: "Thank you for your message! Our team will get back to you shortly. For immediate assistance, please call us or email us.",
+    try {
+      const response = await fetch(`${API_URL}/message`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId: sessionId,
+          message: userMessageText
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.botMessage) {
+        const botResponse = {
+          id: Date.now() + 1,
+          text: data.botMessage.text,
+          sender: 'bot',
+          timestamp: new Date(data.botMessage.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        
+        setMessages(prev => [...prev, botResponse]);
+        
+        // Increment unread count if chat is closed
+        if (!isOpen) {
+          setUnreadCount(prev => prev + 1);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      // Fallback response on error
+      const errorResponse = {
+        id: Date.now() + 1,
+        text: "I'm sorry, I'm having trouble connecting. Please try again or contact our support team.",
         sender: 'bot',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
-      setMessages(prev => [...prev, botResponse]);
+      setMessages(prev => [...prev, errorResponse]);
+    } finally {
       setIsTyping(false);
-      
-      // Increment unread count if chat is closed
-      if (!isOpen) {
-        setUnreadCount(prev => prev + 1);
-      }
-    }, 1500);
+    }
   };
 
   const handleKeyPress = (e) => {
