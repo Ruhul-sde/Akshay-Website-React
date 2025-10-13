@@ -34,6 +34,9 @@ import ErpCaseStudies from './pages/ErpCaseStudies';
 import ContactUs from './pages/ContactUs';
 import AboutUs from './pages/AboutUs';
 import Blog from './pages/Blog';
+import Support from './pages/Support';
+import UserDashboard from './pages/UserDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 
 import './App.css';
 
@@ -80,6 +83,11 @@ function App() {
 
           {/* Blog Route */}
           <Route path="/blog" element={<Blog />} />
+
+          {/* Support Routes */}
+          <Route path="/support" element={<Support />} />
+          <Route path="/user-dashboard" element={<UserDashboard />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Routes>
         <Footer />
         <ChatWidget />

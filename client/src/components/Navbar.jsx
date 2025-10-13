@@ -95,6 +95,12 @@ export default function Navbar() {
       href: '/contact',
       hasDropdown: false,
       isRoute: true
+    },
+    { 
+      label: 'Support',
+      href: '/support',
+      hasDropdown: false,
+      isRoute: true
     }
   ];
 
