@@ -34,6 +34,7 @@ import ErpCaseStudies from './pages/ERP/ErpCaseStudies';
 import ContactUs from './pages/ContactUs';
 import AboutUs from './pages/AboutUs';
 import Blog from './pages/Blog';
+import BlogDetail from './pages/BlogDetail'; // Assuming BlogDetail component exists
 import Support from './pages/Support';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
@@ -81,8 +82,9 @@ function App() {
           {/* About Route */}
           <Route path="/about" element={<AboutUs />} />
 
-          {/* Blog Route */}
+          {/* Blog Routes */}
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogDetail />} />
 
           {/* Support Routes */}
           <Route path="/support" element={<Support />} />

@@ -31,7 +31,7 @@ export default function UserDashboard() {
 
   const fetchTickets = async (token) => {
     try {
-      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
       const response = await fetch(`${apiUrl}/tickets/user`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -49,7 +49,7 @@ export default function UserDashboard() {
     const token = localStorage.getItem('supportToken');
     
     try {
-      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
       const response = await fetch(`${apiUrl}/tickets/create`, {
         method: 'POST',
         headers: {
@@ -73,7 +73,7 @@ export default function UserDashboard() {
     const token = localStorage.getItem('supportToken');
     
     try {
-      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
       const response = await fetch(`${apiUrl}/tickets/${ticketId}/response`, {
         method: 'POST',
         headers: {

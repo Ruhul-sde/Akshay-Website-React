@@ -25,7 +25,8 @@ export default function AdminDashboard() {
 
   const fetchTickets = async (token) => {
     try {
-      const response = await fetch('http://localhost:5000/tickets/all', {
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+      const response = await fetch(`${apiUrl}/tickets/all`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -41,7 +42,8 @@ export default function AdminDashboard() {
     const token = localStorage.getItem('supportToken');
     
     try {
-      const response = await fetch(`http://localhost:5000/tickets/${ticketId}/status`, {
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+      const response = await fetch(`${apiUrl}/tickets/${ticketId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +66,8 @@ export default function AdminDashboard() {
     const token = localStorage.getItem('supportToken');
     
     try {
-      const response = await fetch(`http://localhost:5000/tickets/${ticketId}/response`, {
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+      const response = await fetch(`${apiUrl}/tickets/${ticketId}/response`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

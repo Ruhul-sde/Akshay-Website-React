@@ -2,9 +2,36 @@
 // Reference: blueprint:javascript_gemini
 
 const { GoogleGenAI } = require("@google/genai");
+const CompanyKnowledge = require("../models/CompanyKnowledge");
 
 // Initialize Gemini AI client
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+
+/**
+ * Search knowledge base for relevant information
+ * @param {string} query - User's query
+ * @returns {Promise<Array>} - Relevant knowledge entries
+ */
+async function searchKnowledge(query) {
+  try {
+    // Extract keywords from query
+    const keywords = query.toLowerCase().split(' ').filter(word => word.length > 3);
+    
+    // Search by keywords and text
+    const results = await CompanyKnowledge.find({
+      isActive: true,
+      $or: [
+        { keywords: { $in: keywords } },
+        { $text: { $search: query } }
+      ]
+    }).limit(5);
+
+    return results;
+  } catch (error) {
+    console.error("Knowledge search error:", error);
+    return [];
+  }
+}
 
 /**
  * Generate chatbot response using Gemini AI
@@ -14,7 +41,16 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
  */
 async function generateChatResponse(userMessage, conversationHistory = []) {
   try {
-    // Build system instruction
+    // Search knowledge base for relevant context
+    const knowledgeResults = await searchKnowledge(userMessage);
+    let contextInfo = '';
+    
+    if (knowledgeResults.length > 0) {
+      contextInfo = '\n\nRelevant Company Information:\n' + 
+        knowledgeResults.map(k => `Q: ${k.question}\nA: ${k.answer}`).join('\n\n');
+    }
+
+    // Build system instruction with knowledge base context
     const systemInstruction = `You are a helpful AI assistant for Akshay Software Technologies. 
 You help customers with information about:
 - SAP Business One Solutions
@@ -26,8 +62,17 @@ You help customers with information about:
 - Payroll Management
 - E-Invoicing Solutions
 
-Be friendly, professional, and provide accurate information about these services. 
-If asked about pricing or specific details, encourage them to contact the sales team or request a free quote.`;
+Company Details:
+- Founded: 1987 (37+ years of experience)
+- Headquarters: Mumbai, India
+- Global Offices: Dubai, UAE
+- Contact: info@akshay.com | +91-22-6712 6060
+- Website: www.akshay.com
+
+Use the following knowledge base when answering questions:${contextInfo}
+
+Be friendly, professional, and provide accurate information based on the knowledge base. 
+If asked about pricing or specific details not in the knowledge base, encourage them to contact the sales team at info@akshay.com or request a free quote.`;
 
     // Build contents array with conversation history
     const contents = [];
@@ -121,5 +166,6 @@ Respond with only the intent category.`;
 
 module.exports = {
   generateChatResponse,
-  analyzeIntent
+  analyzeIntent,
+  searchKnowledge
 };

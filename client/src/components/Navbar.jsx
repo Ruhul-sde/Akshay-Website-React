@@ -10,6 +10,8 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [hoverTimeout, setHoverTimeout] = useState(null);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [navItems, setNavItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +22,35 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
+  useEffect(() => {
+    fetchNavigation();
+  }, []);
+
+  const fetchNavigation = async () => {
+    try {
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+      const response = await fetch(`${apiUrl}/navigation/menu`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setNavItems(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching navigation:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderIcon = (iconPath) => {
+    return (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={iconPath} />
+      </svg>
+    );
+  };
+
+  const navItemsStatic = [
     { 
       label: 'Home',
       href: '/',
@@ -214,7 +244,16 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-0">
-            {navItems.map((item, index) => (
+            {loading ? (
+              <div className="flex items-center gap-2 text-gray-400">
+                <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Loading...
+              </div>
+            ) : (
+              navItems.map((item, index) => (
               <div
                 key={index}
                 className="relative group"
@@ -226,7 +265,7 @@ export default function Navbar() {
                     to={item.href}
                     className="relative flex items-center gap-2 px-4 py-2.5 text-base font-semibold text-gray-700 hover:text-purple-600 transition-all duration-300 rounded-xl group/link"
                   >
-                    <span className="transform group-hover/link:scale-110 transition-transform duration-300">{item.icon}</span>
+                    <span className="transform group-hover/link:scale-110 transition-transform duration-300">{renderIcon(item.icon)}</span>
                     <span className="relative">
                       {item.label}
                       <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-red-600 to-purple-600 transform origin-left transition-all duration-300 scale-x-0 group-hover/link:scale-x-100 rounded-full"></span>
@@ -237,7 +276,7 @@ export default function Navbar() {
                     href={item.href}
                     className="relative flex items-center gap-2 px-4 py-2.5 text-base font-semibold text-gray-700 hover:text-purple-600 transition-all duration-300 rounded-xl group/link"
                   >
-                    <span className="transform group-hover/link:scale-110 transition-transform duration-300">{item.icon}</span>
+                    <span className="transform group-hover/link:scale-110 transition-transform duration-300">{renderIcon(item.icon)}</span>
                     <span className="relative">
                       {item.label}
                       <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-red-600 to-purple-600 transform origin-left transition-all duration-300 rounded-full ${
@@ -283,7 +322,8 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* Enhanced CTA Button */}
@@ -331,7 +371,7 @@ export default function Navbar() {
                       className="flex items-center gap-3 px-4 py-3 text-base font-semibold text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-300 group"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <span className="transform group-hover:scale-110 transition-transform duration-300">{item.icon}</span>
+                      <span className="transform group-hover:scale-110 transition-transform duration-300">{renderIcon(item.icon)}</span>
                       {item.label}
                     </Link>
                   ) : (
@@ -341,7 +381,7 @@ export default function Navbar() {
                       onClick={() => item.hasDropdown ? setActiveDropdown(activeDropdown === index ? null : index) : setIsMobileMenuOpen(false)}
                     >
                       <div className="flex items-center gap-3">
-                        <span className="transform group-hover:scale-110 transition-transform duration-300">{item.icon}</span>
+                        <span className="transform group-hover:scale-110 transition-transform duration-300">{renderIcon(item.icon)}</span>
                         <span>{item.label}</span>
                       </div>
                       {item.hasDropdown && (

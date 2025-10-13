@@ -20,6 +20,10 @@ app.use(cors());
 app.use("/auth", require("./routes/auth"));
 app.use("/tickets", require("./routes/tickets"));
 app.use("/chat", require("./routes/chat"));
+app.use("/quotes", require("./routes/quotes"));
+app.use("/knowledge", require("./routes/knowledge"));
+app.use("/navigation", require("./routes/navigation"));
+app.use("/blogs", require("./routes/blogs"));
 
 // Start Server after DB connect
 connectDB().then(() => {
