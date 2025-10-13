@@ -28,7 +28,7 @@ export default function Support() {
     e.preventDefault();
     try {
       const endpoint = userType === 'admin' ? '/auth/admin/login' : '/auth/login';
-      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
       const response = await fetch(`${apiUrl}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -56,7 +56,7 @@ export default function Support() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
       const response = await fetch(`${apiUrl}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

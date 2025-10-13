@@ -23,7 +23,8 @@ app.use("/chat", require("./routes/chat"));
 
 // Start Server after DB connect
 connectDB().then(() => {
-  app.listen(process.env.PORT, "0.0.0.0", () =>
-    console.log(`🚀 Server running on port ${process.env.PORT}`)
-  );
+  app.listen(process.env.PORT, "0.0.0.0", () => {
+    console.log(`🚀 Server running on http://0.0.0.0:${process.env.PORT}`);
+    console.log(`🔗 Backend accessible at port ${process.env.PORT}`);
+  });
 });

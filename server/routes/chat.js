@@ -4,6 +4,19 @@ const ChatConversation = require("../models/ChatConversation");
 const { generateChatResponse, analyzeIntent } = require("../services/geminiService");
 const crypto = require('crypto');
 const { chatLimiter } = require("../middleware/rateLimiter");
+const mongoose = require('mongoose');
+
+// Health check endpoint
+router.get("/health", (req, res) => {
+  const mongoStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  const geminiStatus = process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_gemini_api_key_here_change_this_in_production' ? 'connected' : 'disconnected';
+  
+  res.json({
+    backend: 'connected',
+    mongodb: mongoStatus,
+    gemini: geminiStatus
+  });
+});
 
 // Generate UUID using Node's built-in crypto
 const uuidv4 = () => crypto.randomUUID();
