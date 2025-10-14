@@ -1,8 +1,27 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Statistics() {
-  const stats = [
+  const [statsData, setStatsData] = useState(null);
+
+  useEffect(() => {
+    fetchStatsData();
+  }, []);
+
+  const fetchStatsData = async () => {
+    try {
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+      const response = await fetch(`${apiUrl}/api/statistics`);
+      const data = await response.json();
+      if (data.success) {
+        setStatsData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching statistics data:', error);
+    }
+  };
+
+  const defaultStats = [
     {
       number: "150+",
       label: "EMPLOYEES",
@@ -33,7 +52,7 @@ export default function Statistics() {
         </h2>
         
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-          {stats.map((stat, index) => (
+          {(statsData?.stats?.sort((a, b) => a.order - b.order) || defaultStats).map((stat, index) => (
             <div key={index} className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className={`text-5xl lg:text-6xl font-bold mb-4 ${stat.color}`}>
                 {stat.number}

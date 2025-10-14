@@ -3,6 +3,24 @@ import React, { useState, useEffect } from 'react';
 export default function AboutCompany() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
+  const [aboutData, setAboutData] = useState(null);
+
+  useEffect(() => {
+    fetchAboutData();
+  }, []);
+
+  const fetchAboutData = async () => {
+    try {
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+      const response = await fetch(`${apiUrl}/api/about-company`);
+      const data = await response.json();
+      if (data.success) {
+        setAboutData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching about data:', error);
+    }
+  };
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -61,13 +79,7 @@ export default function AboutCompany() {
           >
             <div className="relative mb-8">
               <h2 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                Transforming
-                <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-purple-600 to-blue-600 animate-pulse">
-                  Businesses
-                </span>
-                <br />
-                for 3+ Decades
+                {aboutData?.title || 'Transforming Businesses for 3+ Decades'}
               </h2>
 
               {/* Decorative Element */}
@@ -75,9 +87,7 @@ export default function AboutCompany() {
             </div>
 
             <p className="text-xl text-gray-600 mb-10 leading-relaxed">
-              Akshay Software Technologies has been at the forefront of digital transformation, 
-              empowering businesses with comprehensive enterprise software solutions. From 
-              implementation to ongoing support, we serve as your trusted technology partner.
+              {aboutData?.description || 'Akshay Software Technologies has been at the forefront of digital transformation.'}
             </p>
 
             {/* Enhanced Feature Cards */}

@@ -6,6 +6,7 @@ export default function QuoteModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    countryCode: '+91',
     phone: '',
     company: '',
     service: '',
@@ -14,6 +15,33 @@ export default function QuoteModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
   const [errors, setErrors] = useState({});
+  const [services, setServices] = useState([]);
+  const [countryCodes, setCountryCodes] = useState([]);
+
+  // Fetch form configuration
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+        const response = await fetch(`${apiUrl}/quote-config/config`);
+        const data = await response.json();
+        
+        if (data.success) {
+          setServices(data.config.services || []);
+          setCountryCodes(data.config.countryCodes || []);
+          if (data.config.countryCodes && data.config.countryCodes.length > 0) {
+            setFormData(prev => ({ ...prev, countryCode: data.config.countryCodes[0].dialCode }));
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching config:', error);
+      }
+    };
+
+    if (isOpen) {
+      fetchConfig();
+    }
+  }, [isOpen]);
 
   // Prevent scrolling when modal is open
   useEffect(() => {
@@ -52,7 +80,7 @@ export default function QuoteModal({ isOpen, onClose }) {
     }
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone is required';
-    } else if (!/^\+?[\d\s()-]{10,}$/.test(formData.phone)) {
+    } else if (!/^[\d\s()-]{7,}$/.test(formData.phone)) {
       newErrors.phone = 'Phone number is invalid';
     }
     if (!formData.service) newErrors.service = 'Please select a service';
@@ -93,6 +121,7 @@ export default function QuoteModal({ isOpen, onClose }) {
         setFormData({
           name: '',
           email: '',
+          countryCode: countryCodes[0]?.dialCode || '+91',
           phone: '',
           company: '',
           service: '',
@@ -188,21 +217,36 @@ export default function QuoteModal({ isOpen, onClose }) {
                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
               </div>
 
-              <div>
+              <div className="md:col-span-2">
                 <label className="block text-gray-700 font-semibold mb-1.5 text-sm">Phone *</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  disabled={loading}
-                  className={`w-full px-3 py-2 border ${errors.phone ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300 text-sm disabled:bg-gray-100`}
-                  placeholder="+1 (555) 000-0000"
-                />
+                <div className="flex gap-2">
+                  <select
+                    name="countryCode"
+                    value={formData.countryCode}
+                    onChange={handleChange}
+                    disabled={loading}
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300 text-sm disabled:bg-gray-100 w-32"
+                  >
+                    {countryCodes.map((country) => (
+                      <option key={country.code} value={country.dialCode}>
+                        {country.dialCode} ({country.code})
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    disabled={loading}
+                    className={`flex-1 px-3 py-2 border ${errors.phone ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300 text-sm disabled:bg-gray-100`}
+                    placeholder="123 456 7890"
+                  />
+                </div>
                 {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
               </div>
 
-              <div>
+              <div className="md:col-span-2">
                 <label className="block text-gray-700 font-semibold mb-1.5 text-sm">Company</label>
                 <input
                   type="text"
@@ -226,15 +270,11 @@ export default function QuoteModal({ isOpen, onClose }) {
                 className={`w-full px-3 py-2 border ${errors.service ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300 text-sm disabled:bg-gray-100`}
               >
                 <option value="">Select a service</option>
-                <option value="sap-business-one">SAP Business One</option>
-                <option value="sap-implementation">SAP Implementation</option>
-                <option value="sap-support">SAP Support</option>
-                <option value="cloud-hosting">Cloud Hosting</option>
-                <option value="ai-solutions">AI Solutions</option>
-                <option value="it-staffing">IT Staffing</option>
-                <option value="erp-solutions">ERP Solutions</option>
-                <option value="digital-marketing">Digital Marketing</option>
-                <option value="other">Other</option>
+                {services.map((service) => (
+                  <option key={service} value={service}>
+                    {service}
+                  </option>
+                ))}
               </select>
               {errors.service && <p className="text-red-500 text-xs mt-1">{errors.service}</p>}
             </div>

@@ -1,9 +1,36 @@
-
 import React, { useState, useEffect } from 'react';
+import Toast from '../components/Toast';
 
 export default function AboutUs() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
+  const [aboutData, setAboutData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState(null);
+
+  // Fetch About Us data from database
+  useEffect(() => {
+    const fetchAboutData = async () => {
+      try {
+        const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+        const response = await fetch(`${apiUrl}/about-us`);
+        const data = await response.json();
+
+        if (data.success) {
+          setAboutData(data.data);
+        } else {
+          setToast({ type: 'error', message: 'Failed to load content' });
+        }
+      } catch (error) {
+        console.error('Error fetching about data:', error);
+        setToast({ type: 'error', message: 'Error loading content' });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAboutData();
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -19,94 +46,38 @@ export default function AboutUs() {
 
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('scroll', handleScroll);
-    
+
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
-  const stats = [
-    { number: '150+', label: 'EMPLOYEES' },
-    { number: '50+', label: 'CLIENTS' },
-    { number: '26+', label: 'EXPERT CONSULTANTS' },
-    { number: '100%', label: 'HAPPY CLIENTS' }
-  ];
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading content...</p>
+        </div>
+      </div>
+    );
+  }
 
-  const boardMembers = [
-    {
-      name: 'Mr. Anant C. V.',
-      role: 'CHAIRMAN',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face',
-      description: 'Anant is responsible for the overall management and supervision of the activities.'
-    },
-    {
-      name: 'Ms. Nethraa Ganesan',
-      role: 'MANAGING DIRECTOR',
-      image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop&crop=face',
-      description: 'With over two decades of dynamic leadership experience with a MBA degree, Nethraa...'
-    },
-    {
-      name: 'Mr. Akshay Anantapadmanabhan',
-      role: 'DIRECTOR',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face',
-      description: 'Akshay Anantapadmanabhan has been instrumental in driving the company forward...'
-    }
-  ];
-
-  const leadershipTeam = [
-    {
-      name: 'Mr. Rajan Chelladurai',
-      role: 'GLOBAL HEAD - ERP',
-      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&h=300&fit=crop&crop=face',
-      description: 'With over 30 years of rich industry experience, Rajan Chelladurai serves as the Global Head - ERP at Akshay Software Technologies Private Limited.'
-    },
-    {
-      name: 'Mrs. Bhavana Thapa',
-      role: 'TALENT ACQUISITION - HR MANAGER',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=300&fit=crop&crop=face',
-      description: 'Bhavana leads Akshay\'s staffing and HR initiatives with a strong focus on sourcing the right talent and ensuring seamless client coordination.'
-    }
-  ];
-
-  const services = [
-    {
-      title: 'SAP Business One',
-      description: 'Scalable ERP solution streamlining business operations, finance, and inventory management.',
-      icon: '💼'
-    },
-    {
-      title: 'SAP Support',
-      description: 'Expert assistance ensuring smooth SAP system performance, upgrades, and troubleshooting.',
-      icon: '🛠️'
-    },
-    {
-      title: 'IT Staffing',
-      description: 'Providing skilled tech talent for projects, contracts, and full-time roles.',
-      icon: '👥'
-    },
-    {
-      title: 'Digital Marketing',
-      description: 'Driving online growth through SEO, PPC, content and social media.',
-      icon: '📱'
-    },
-    {
-      title: 'AI Inside Sales',
-      description: 'AI-powered lead generation, prospect engagement, and sales automation for businesses.',
-      icon: '🤖'
-    },
-    {
-      title: 'Cloud Hosting & Computing',
-      description: 'Secure, scalable cloud infrastructure ensuring seamless data storage and processing.',
-      icon: '☁️'
-    }
-  ];
+  if (!aboutData) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+        <p className="text-gray-600">No content available</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
-      {/* Hero Section */}
+      {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
+
+      {/* Hero Section with 3D Effects */}
       <section className="relative py-24 bg-gradient-to-br from-red-500 via-purple-600 to-blue-600 text-white overflow-hidden">
-        {/* 3D Background Elements */}
         <div className="absolute inset-0 pointer-events-none">
           <div 
             className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-3xl animate-pulse"
@@ -121,14 +92,13 @@ export default function AboutUs() {
               animationDelay: '1s'
             }}
           />
-          
-          {/* Floating Icons */}
+
           <div className="absolute top-1/3 left-10 w-16 h-16 bg-white/20 rounded-full flex items-center justify-center animate-bounce">
             <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/>
             </svg>
           </div>
-          
+
           <div className="absolute top-1/4 right-10 w-12 h-12 bg-white/30 rounded-lg flex items-center justify-center animate-pulse">
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
@@ -137,9 +107,9 @@ export default function AboutUs() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">About Us</h1>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6">{aboutData.hero.title}</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
-            Empowering businesses with Innovation & Excellence for over 38 years
+            {aboutData.hero.subtitle}
           </p>
         </div>
       </section>
@@ -157,69 +127,33 @@ export default function AboutUs() {
 
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
-            {/* Vision Section */}
             <div className="space-y-8">
               <div className="inline-flex items-center px-4 py-2 bg-blue-100 rounded-full">
-                <span className="text-blue-800 font-semibold text-sm">🎯 VISION</span>
+                <span className="text-blue-800 font-semibold text-sm">🎯 {aboutData.vision.title}</span>
               </div>
               <p className="text-lg text-gray-700 leading-relaxed">
-                To be a top player in every line of business that we are in. To be technologically ahead always. To empower employees, clients and community.
+                {aboutData.vision.description}
               </p>
             </div>
 
-            {/* Core Values */}
             <div className="space-y-6">
               <div className="inline-flex items-center px-4 py-2 bg-purple-100 rounded-full">
                 <span className="text-purple-800 font-semibold text-sm">💎 CORE VALUES</span>
               </div>
               <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mt-1">
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
+                {aboutData.coreValues.map((value, index) => (
+                  <div key={index} className="flex items-start space-x-3">
+                    <div className={`w-6 h-6 bg-gradient-to-br ${value.color} rounded-full flex items-center justify-center mt-1`}>
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">{value.title}</h4>
+                      <p className="text-gray-600 text-sm">{value.description}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Customer Care</h4>
-                    <p className="text-gray-600 text-sm">Our customers' satisfaction is our success.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mt-1">
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">People Care</h4>
-                    <p className="text-gray-600 text-sm">We value our employees as our greatest asset.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mt-1">
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Quality Care</h4>
-                    <p className="text-gray-600 text-sm">Excellence is our standard.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mt-1">
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Investor Care</h4>
-                    <p className="text-gray-600 text-sm">We build long-term relationships based on trust.</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -227,28 +161,18 @@ export default function AboutUs() {
           {/* Mission Section */}
           <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg border border-gray-100">
             <div className="inline-flex items-center px-4 py-2 bg-green-100 rounded-full mb-6">
-              <span className="text-green-800 font-semibold text-sm">🚀 MISSION</span>
+              <span className="text-green-800 font-semibold text-sm">🚀 {aboutData.mission.title}</span>
             </div>
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Our Mission</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">{aboutData.mission.heading}</h3>
                 <ul className="space-y-3 text-gray-700">
-                  <li className="flex items-start space-x-2">
-                    <span className="text-green-500 mt-1">•</span>
-                    <span>Provide efficient ERP Software Solutions, Staffing Solutions, and AI-driven Sales and Digital Marketing Solutions.</span>
-                  </li>
-                  <li className="flex items-start space-x-2">
-                    <span className="text-green-500 mt-1">•</span>
-                    <span>Enable organizations to focus on their core activities using the latest technology.</span>
-                  </li>
-                  <li className="flex items-start space-x-2">
-                    <span className="text-green-500 mt-1">•</span>
-                    <span>Nurture human capital to deliver quality services on time.</span>
-                  </li>
-                  <li className="flex items-start space-x-2">
-                    <span className="text-green-500 mt-1">•</span>
-                    <span>Foster continuous improvement and innovation.</span>
-                  </li>
+                  {aboutData.mission.points.map((point, index) => (
+                    <li key={index} className="flex items-start space-x-2">
+                      <span className="text-green-500 mt-1">•</span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="flex items-center justify-center">
@@ -281,15 +205,16 @@ export default function AboutUs() {
               <span className="text-white font-semibold text-sm">📊 ABOUT COMPANY</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Empowering businesses with Innovation & Excellence for over <span className="text-red-400">38 years</span>
+              {aboutData.aboutCompany.title.split('38 years')[0]}
+              <span className="text-red-400">38 years</span>
             </h2>
             <p className="text-xl text-gray-300 max-w-4xl mx-auto">
-              Founded in June 1987 by seasoned technocrats, Akshay Software Technologies Private Limited is an IT services company with offices in India and the UAE. Their offerings include SAP Business One ERP for SMEs, staffing solutions, and a team of certified consultants with extensive project experience across domains.
+              {aboutData.aboutCompany.description}
             </p>
           </div>
 
           <div className="grid md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
+            {aboutData.stats.map((stat, index) => (
               <div key={index} className="text-center group">
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:border-red-400/50 transition-all duration-300 transform hover:scale-105">
                   <div className="text-4xl md:text-5xl font-bold text-red-400 mb-4 group-hover:text-white transition-colors duration-300">
@@ -312,7 +237,7 @@ export default function AboutUs() {
             <div className="relative">
               <div className="absolute -top-10 -left-10 w-20 h-20 bg-blue-100 rounded-full opacity-50"></div>
               <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-purple-100 rounded-full opacity-30"></div>
-              
+
               <div className="relative bg-gradient-to-br from-blue-600 to-purple-700 rounded-2xl p-8 text-white">
                 <div className="absolute top-4 right-4">
                   <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
@@ -340,45 +265,23 @@ export default function AboutUs() {
                 <span className="text-blue-800 font-semibold text-sm">🏢 A COMPANY</span>
               </div>
               <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                Driving Digital Transformation using Modern Technology
+                {aboutData.digitalTransformation.title}
               </h2>
               <p className="text-lg text-gray-700 mb-8">
-                Under the new young leadership, Akshay has new initiatives as offerings – Cloud Hosting and Computing Services, AI (Akshay Intelligence), Digital marketing Agency, AI Inside Sales.
+                {aboutData.digitalTransformation.description}
               </p>
-              
+
               <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
+                {aboutData.digitalTransformation.features.map((feature, index) => (
+                  <div key={index} className="flex items-center space-x-3">
+                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                      </svg>
+                    </div>
+                    <span className="text-gray-700 font-medium">{feature}</span>
                   </div>
-                  <span className="text-gray-700 font-medium">Cloud Hosting & Computing</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                  </div>
-                  <span className="text-gray-700 font-medium">Akshay Intelligence (AI)</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                  </div>
-                  <span className="text-gray-700 font-medium">Digital Marketing</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                  </div>
-                  <span className="text-gray-700 font-medium">AI Inside Sales</span>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -396,7 +299,7 @@ export default function AboutUs() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {boardMembers.map((member, index) => (
+            {aboutData.boardMembers.sort((a, b) => a.order - b.order).map((member, index) => (
               <div key={index} className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-red-200 transform hover:scale-105">
                 <div className="relative h-64 overflow-hidden">
                   <img 
@@ -428,7 +331,7 @@ export default function AboutUs() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {leadershipTeam.map((member, index) => (
+            {aboutData.leadershipTeam.sort((a, b) => a.order - b.order).map((member, index) => (
               <div key={index} className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-purple-200 transform hover:scale-105">
                 <div className="relative h-64 overflow-hidden">
                   <img 
@@ -471,7 +374,7 @@ export default function AboutUs() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
+            {aboutData.services.sort((a, b) => a.order - b.order).map((service, index) => (
               <div key={index} className="group bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:border-red-400/50 transition-all duration-300 transform hover:scale-105">
                 <div className="text-4xl mb-4">{service.icon}</div>
                 <h3 className="text-xl font-bold mb-3 group-hover:text-red-400 transition-colors duration-300">{service.title}</h3>

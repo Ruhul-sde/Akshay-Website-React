@@ -7,11 +7,12 @@ const router = express.Router();
 // Create quote request
 router.post("/create", async (req, res) => {
   try {
-    const { name, email, phone, company, service, message } = req.body;
+    const { name, email, countryCode, phone, company, service, message } = req.body;
     
     const quote = new Quote({
       name,
       email,
+      countryCode,
       phone,
       company,
       service,

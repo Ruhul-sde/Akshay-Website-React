@@ -3,14 +3,28 @@ import React, { useState, useEffect } from 'react';
 export default function TrustedCompanies() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
+  const [companiesData, setCompaniesData] = useState(null);
 
-  const companies = [
+  useEffect(() => {
+    fetchCompaniesData();
+  }, []);
+
+  const fetchCompaniesData = async () => {
+    try {
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+      const response = await fetch(`${apiUrl}/api/trusted-companies`);
+      const data = await response.json();
+      if (data.success) {
+        setCompaniesData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching companies data:', error);
+    }
+  };
+
+  const companies = companiesData?.companies?.sort((a, b) => a.order - b.order) || [
     { name: 'Microsoft', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/512px-Microsoft_logo.svg.png' },
-    { name: 'Google', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/512px-Google_2015_logo.svg.png' },
-    { name: 'Amazon', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/512px-Amazon_logo.svg.png' },
-    { name: 'IBM', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/512px-IBM_logo.svg.png' },
-    { name: 'Oracle', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Oracle_logo.svg/512px-Oracle_logo.svg.png' },
-    { name: 'SAP', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/SAP_2011_logo.svg/512px-SAP_2011_logo.svg.png' }
+    { name: 'Google', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/512px-Google_2015_logo.svg.png' }
   ];
 
   useEffect(() => {

@@ -4,8 +4,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function ClientTestimonials() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
+  const [testimonialsData, setTestimonialsData] = useState(null);
+
+  useEffect(() => {
+    fetchTestimonialsData();
+  }, []);
+
+  const fetchTestimonialsData = async () => {
+    try {
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+      const response = await fetch(`${apiUrl}/api/testimonials`);
+      const data = await response.json();
+      if (data.success) {
+        setTestimonialsData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching testimonials data:', error);
+    }
+  };
   
-  const testimonials = [
+  const defaultTestimonials = [
     {
       company: "Stockholding",
       testimonial: "This is to certify that Akshay Software Technologies Limited has been providing IT and software services to Stock Holding Corporations through its personnel deployed to SHCIL.",
@@ -25,6 +43,8 @@ export default function ClientTestimonials() {
       logo: "SHC"
     }
   ];
+
+  const testimonials = testimonialsData?.testimonials?.sort((a, b) => a.order - b.order) || defaultTestimonials;
 
   // Auto-rotate testimonials
   useEffect(() => {

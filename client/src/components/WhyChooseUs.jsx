@@ -3,8 +3,26 @@ import React, { useState, useEffect } from 'react';
 export default function WhyChooseUs() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
+  const [whyChooseData, setWhyChooseData] = useState(null);
 
-  const features = [
+  useEffect(() => {
+    fetchWhyChooseData();
+  }, []);
+
+  const fetchWhyChooseData = async () => {
+    try {
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+      const response = await fetch(`${apiUrl}/api/why-choose-us`);
+      const data = await response.json();
+      if (data.success) {
+        setWhyChooseData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching why choose us data:', error);
+    }
+  };
+
+  const defaultFeatures = [
     {
       number: "01",
       title: "3+ Decades of Excellence",
@@ -133,7 +151,7 @@ export default function WhyChooseUs() {
 
             {/* Enhanced Features List */}
             <div className="space-y-8">
-              {features.map((feature, index) => (
+              {(whyChooseData?.reasons?.sort((a, b) => a.order - b.order) || defaultFeatures).map((feature, index) => (
                 <div 
                   key={index} 
                   className={`group flex items-start space-x-6 transform transition-all duration-700 hover:scale-105 ${

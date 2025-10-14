@@ -17,13 +17,46 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-app.use("/auth", require("./routes/auth"));
-app.use("/tickets", require("./routes/tickets"));
-app.use("/chat", require("./routes/chat"));
-app.use("/quotes", require("./routes/quotes"));
-app.use("/knowledge", require("./routes/knowledge"));
-app.use("/navigation", require("./routes/navigation"));
-app.use("/blogs", require("./routes/blogs"));
+const authRoutes = require("./routes/auth");
+const blogRoutes = require("./routes/blogs");
+const ticketRoutes = require("./routes/tickets");
+const quoteRoutes = require("./routes/quotes");
+const quoteConfigRoutes = require("./routes/quoteConfig");
+const navigationRoutes = require("./routes/navigation");
+const knowledgeRoutes = require("./routes/knowledge");
+const chatRoutes = require("./routes/chat");
+const contactRoutes = require("./routes/contact");
+const aboutUsRoutes = require("./routes/aboutUs");
+const footerRoutes = require("./routes/footer");
+const heroRoutes = require("./routes/hero");
+const trustedCompaniesRoutes = require("./routes/trustedCompanies");
+const aboutCompanyRoutes = require("./routes/aboutCompany");
+const servicesRoutes = require("./routes/services");
+const whyChooseUsRoutes = require("./routes/whyChooseUs");
+const statisticsRoutes = require("./routes/statistics");
+const testimonialsRoutes = require("./routes/testimonials");
+const chatbotRoutes = require("./routes/chatbot");
+
+
+app.use("/auth", authRoutes);
+app.use("/blogs", blogRoutes);
+app.use("/tickets", ticketRoutes);
+app.use("/quotes", quoteRoutes);
+app.use("/quote-config", quoteConfigRoutes);
+app.use("/navigation", navigationRoutes);
+app.use("/knowledge", knowledgeRoutes);
+app.use("/chat", chatRoutes);
+app.use("/contact", contactRoutes);
+app.use("/about-us", aboutUsRoutes);
+app.use("/footer", footerRoutes);
+app.use("/hero", heroRoutes);
+app.use("/trusted-companies", trustedCompaniesRoutes);
+app.use("/about-company", aboutCompanyRoutes);
+app.use("/services", servicesRoutes);
+app.use("/why-choose-us", whyChooseUsRoutes);
+app.use("/statistics", statisticsRoutes);
+app.use("/testimonials", testimonialsRoutes);
+app.use("/api/chatbot", chatbotRoutes);
 
 // Start Server after DB connect
 connectDB().then(() => {

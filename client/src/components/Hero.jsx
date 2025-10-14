@@ -4,28 +4,43 @@ import React, { useState, useEffect } from 'react';
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [heroData, setHeroData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const slides = [
+  useEffect(() => {
+    fetchHeroData();
+  }, []);
+
+  const fetchHeroData = async () => {
+    try {
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+      const response = await fetch(`${apiUrl}/api/hero`);
+      const data = await response.json();
+      if (data.success) {
+        setHeroData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching hero data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const slides = heroData ? [
+    {
+      image: heroData.backgroundImage || "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1920&h=1080&fit=crop",
+      title: heroData.title || "Innovative Business Solutions",
+      subtitle: heroData.subtitle || "Transform Your Enterprise",
+      description: heroData.description || "Empowering businesses with comprehensive solutions.",
+      color: "from-blue-600 to-purple-600"
+    }
+  ] : [
     {
       image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1920&h=1080&fit=crop",
       title: "Innovative Business Solutions",
       subtitle: "Transform Your Enterprise",
-      description: "Empowering businesses for over 3 decades with comprehensive enterprise software solutions. From implementation to support, we're your trusted technology partner.",
+      description: "Empowering businesses for over 3 decades with comprehensive enterprise software solutions.",
       color: "from-blue-600 to-purple-600"
-    },
-    {
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=1080&fit=crop",
-      title: "Cloud & AI Integration",
-      subtitle: "Future-Ready Technology",
-      description: "Leverage cutting-edge cloud hosting and artificial intelligence to streamline operations, enhance productivity, and drive digital transformation.",
-      color: "from-emerald-600 to-teal-600"
-    },
-    {
-      image: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=1920&h=1080&fit=crop",
-      title: "Expert IT Staffing",
-      subtitle: "Build Your Dream Team",
-      description: "Connect with top-tier IT professionals and payroll management solutions. Scale your team efficiently with our comprehensive staffing services.",
-      color: "from-orange-600 to-red-600"
     }
   ];
 

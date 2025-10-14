@@ -3,8 +3,26 @@ import React, { useState, useEffect } from 'react';
 export default function ServicesCards() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
+  const [servicesData, setServicesData] = useState(null);
 
-  const services = [
+  useEffect(() => {
+    fetchServicesData();
+  }, []);
+
+  const fetchServicesData = async () => {
+    try {
+      const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+      const response = await fetch(`${apiUrl}/api/services`);
+      const data = await response.json();
+      if (data.success) {
+        setServicesData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching services data:', error);
+    }
+  };
+
+  const defaultServices = [
     {
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,7 +143,7 @@ export default function ServicesCards() {
 
         {/* Enhanced Services Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {services.map((service, index) => (
+          {(servicesData?.services?.sort((a, b) => a.order - b.order) || defaultServices).map((service, index) => (
             <div
               key={index}
               className={`group relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-700 p-8 border border-gray-200/50 transform hover:scale-105 hover:-translate-y-4 ${
