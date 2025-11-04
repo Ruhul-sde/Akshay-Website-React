@@ -36,6 +36,7 @@ const whyChooseUsRoutes = require("./routes/whyChooseUs");
 const statisticsRoutes = require("./routes/statistics");
 const testimonialsRoutes = require("./routes/testimonials");
 const chatbotRoutes = require("./routes/chatbot");
+const adminConfigRoutes = require("./routes/adminConfig");
 
 
 app.use("/auth", authRoutes);
@@ -57,6 +58,7 @@ app.use("/why-choose-us", whyChooseUsRoutes);
 app.use("/statistics", statisticsRoutes);
 app.use("/testimonials", testimonialsRoutes);
 app.use("/api/chatbot", chatbotRoutes);
+app.use("/admin-config", adminConfigRoutes);
 
 // Start Server after DB connect
 connectDB().then(() => {

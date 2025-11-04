@@ -293,15 +293,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Enhanced Scroll Indicator */}
-      <div className="absolute bottom-8 right-8 z-20 text-white animate-bounce">
-        <div className="flex flex-col items-center space-y-2">
-          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white rounded-full animate-pulse mt-2"></div>
-          </div>
-          <span className="text-xs text-gray-300 hidden md:block">Scroll</span>
-        </div>
-      </div>
-    </section>
+      </section>
   );
 }

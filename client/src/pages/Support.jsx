@@ -77,218 +77,247 @@ export default function Support() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 pt-28 pb-16">
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 mb-4">
-            Support Center
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 pt-24 pb-16">
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Header Section */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl mb-6 shadow-lg">
+            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          </div>
+          <h1 className="text-5xl font-bold mb-4">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-pink-600 to-red-600">
+              Support Portal
+            </span>
           </h1>
-          <p className="text-gray-600 text-lg">Get help with your queries and issues</p>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Access your dashboard to manage support tickets, track issues, and get expert assistance
+          </p>
         </div>
 
-        {/* Main Card */}
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-4xl mx-auto">
-          <div className="grid md:grid-cols-2">
-            {/* Left Side - Visual */}
-            <div className="bg-gradient-to-br from-purple-600 to-pink-600 p-12 text-white flex flex-col justify-center">
-              <div className="mb-8">
-                <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-6">
-                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </div>
-                <h2 className="text-3xl font-bold mb-4">24/7 Support</h2>
-                <p className="text-purple-100 text-lg leading-relaxed">
-                  Our dedicated team is here to help you resolve any issues and answer your questions promptly.
-                </p>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                    </svg>
+        {/* Main Content */}
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+            <div className="grid lg:grid-cols-5">
+              {/* Left Side - Info Panel */}
+              <div className="lg:col-span-2 bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 p-10 text-white relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/10 to-transparent"></div>
+                <div className="relative z-10">
+                  <h2 className="text-3xl font-bold mb-6">Welcome Back</h2>
+                  <p className="text-purple-100 text-lg mb-8 leading-relaxed">
+                    Get instant access to our comprehensive support system with real-time ticket tracking and expert assistance.
+                  </p>
+                  
+                  <div className="space-y-5">
+                    {[
+                      { icon: '⚡', title: 'Instant Support', desc: 'Get help in real-time' },
+                      { icon: '📊', title: 'Track Progress', desc: 'Monitor ticket status' },
+                      { icon: '🎯', title: 'Expert Team', desc: '24/7 assistance' },
+                      { icon: '🔒', title: 'Secure Portal', desc: 'Protected access' }
+                    ].map((item, idx) => (
+                      <div key={idx} className="flex items-start gap-4 group">
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300">
+                          {item.icon}
+                        </div>
+                        <div>
+                          <div className="font-semibold text-lg">{item.title}</div>
+                          <div className="text-purple-100 text-sm">{item.desc}</div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <span className="text-purple-100">Instant ticket creation</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                    </svg>
-                  </div>
-                  <span className="text-purple-100">Real-time updates</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                    </svg>
-                  </div>
-                  <span className="text-purple-100">Expert assistance</span>
-                </div>
-              </div>
-            </div>
 
-            {/* Right Side - Forms */}
-            <div className="p-12">
-              {/* User Type Toggle */}
-              <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
-                <button
-                  onClick={() => setUserType('user')}
-                  className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
-                    userType === 'user' 
-                      ? 'bg-white text-purple-600 shadow-md' 
-                      : 'text-gray-500'
-                  }`}
-                >
-                  Customer
-                </button>
-                <button
-                  onClick={() => setUserType('admin')}
-                  className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
-                    userType === 'admin' 
-                      ? 'bg-white text-purple-600 shadow-md' 
-                      : 'text-gray-500'
-                  }`}
-                >
-                  Admin
-                </button>
+                  <div className="mt-10 pt-10 border-t border-white/20">
+                    <div className="text-sm text-purple-100">Need help?</div>
+                    <div className="text-lg font-semibold">support@akshaysoft.com</div>
+                  </div>
+                </div>
               </div>
 
-              {/* Tab Toggle */}
-              {userType === 'user' && (
-                <div className="flex space-x-4 mb-6">
+              {/* Right Side - Auth Forms */}
+              <div className="lg:col-span-3 p-10">
+                {/* User Type Toggle */}
+                <div className="flex bg-gray-100 rounded-2xl p-1.5 mb-8">
                   <button
-                    onClick={() => setActiveTab('login')}
-                    className={`pb-2 font-semibold transition-all ${
-                      activeTab === 'login'
-                        ? 'text-purple-600 border-b-2 border-purple-600'
-                        : 'text-gray-400'
+                    onClick={() => setUserType('user')}
+                    className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-all duration-300 ${
+                      userType === 'user' 
+                        ? 'bg-white text-purple-600 shadow-md' 
+                        : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
-                    Login
+                    <div className="flex items-center justify-center gap-2">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      Customer Portal
+                    </div>
                   </button>
                   <button
-                    onClick={() => setActiveTab('register')}
-                    className={`pb-2 font-semibold transition-all ${
-                      activeTab === 'register'
-                        ? 'text-purple-600 border-b-2 border-purple-600'
-                        : 'text-gray-400'
+                    onClick={() => setUserType('admin')}
+                    className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-all duration-300 ${
+                      userType === 'admin' 
+                        ? 'bg-white text-purple-600 shadow-md' 
+                        : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
-                    Register
+                    <div className="flex items-center justify-center gap-2">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                      Admin Access
+                    </div>
                   </button>
                 </div>
-              )}
 
-              {/* Login Form */}
-              {(activeTab === 'login' || userType === 'admin') && (
-                <form onSubmit={handleLogin} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      value={loginData.email}
-                      onChange={(e) => setLoginData({...loginData, email: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      required
-                    />
+                {/* Tab Toggle for Customer */}
+                {userType === 'user' && (
+                  <div className="flex gap-6 mb-8 border-b border-gray-200">
+                    <button
+                      onClick={() => setActiveTab('login')}
+                      className={`pb-4 font-semibold text-lg transition-all relative ${
+                        activeTab === 'login'
+                          ? 'text-purple-600'
+                          : 'text-gray-400 hover:text-gray-600'
+                      }`}
+                    >
+                      Sign In
+                      {activeTab === 'login' && (
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-600 to-pink-600"></div>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('register')}
+                      className={`pb-4 font-semibold text-lg transition-all relative ${
+                        activeTab === 'register'
+                          ? 'text-purple-600'
+                          : 'text-gray-400 hover:text-gray-600'
+                      }`}
+                    >
+                      Create Account
+                      {activeTab === 'register' && (
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-600 to-pink-600"></div>
+                      )}
+                    </button>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      value={loginData.password}
-                      onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      required
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all transform hover:scale-105"
-                  >
-                    {userType === 'admin' ? 'Admin Login' : 'Login'}
-                  </button>
-                </form>
-              )}
+                )}
 
-              {/* Register Form */}
-              {activeTab === 'register' && userType === 'user' && (
-                <form onSubmit={handleRegister} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      value={registerData.name}
-                      onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      value={registerData.email}
-                      onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      value={registerData.password}
-                      onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Company (Optional)
-                    </label>
-                    <input
-                      type="text"
-                      value={registerData.company}
-                      onChange={(e) => setRegisterData({...registerData, company: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone (Optional)
-                    </label>
-                    <input
-                      type="tel"
-                      value={registerData.phone}
-                      onChange={(e) => setRegisterData({...registerData, phone: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all transform hover:scale-105"
-                  >
-                    Create Account
-                  </button>
-                </form>
-              )}
+                {/* Login Form */}
+                {(activeTab === 'login' || userType === 'admin') && (
+                  <form onSubmit={handleLogin} className="space-y-5">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        value={loginData.email}
+                        onChange={(e) => setLoginData({...loginData, email: e.target.value})}
+                        className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                        placeholder="you@company.com"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        value={loginData.password}
+                        onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                        className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                        placeholder="••••••••"
+                        required
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      {userType === 'admin' ? 'Admin Sign In' : 'Sign In'}
+                    </button>
+                  </form>
+                )}
+
+                {/* Register Form */}
+                {activeTab === 'register' && userType === 'user' && (
+                  <form onSubmit={handleRegister} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        value={registerData.name}
+                        onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                        placeholder="John Doe"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        value={registerData.email}
+                        onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                        placeholder="you@company.com"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        value={registerData.password}
+                        onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                        placeholder="••••••••"
+                        required
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Company
+                        </label>
+                        <input
+                          type="text"
+                          value={registerData.company}
+                          onChange={(e) => setRegisterData({...registerData, company: e.target.value})}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                          placeholder="Optional"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Phone
+                        </label>
+                        <input
+                          type="tel"
+                          value={registerData.phone}
+                          onChange={(e) => setRegisterData({...registerData, phone: e.target.value})}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                          placeholder="Optional"
+                        />
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] mt-6"
+                    >
+                      Create Account
+                    </button>
+                  </form>
+                )}
+              </div>
             </div>
           </div>
         </div>

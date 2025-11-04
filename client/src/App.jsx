@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Footer from './components/Footer';
 import ChatWidget from './components/ChatWidget';
+import ScrollIndicator from './components/ScrollIndicator';
 
 // SAP Pages
 import SapBusinessOne from './pages/sap/SapBusinessOne';
@@ -93,6 +94,7 @@ function App() {
         </Routes>
         <Footer />
         <ChatWidget />
+        <ScrollIndicator />
       </div>
     </Router>
   );

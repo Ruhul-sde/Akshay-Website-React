@@ -18,7 +18,13 @@ const ticketSchema = new mongoose.Schema({
     message: String,
     sender: String,
     senderType: String,
-    timestamp: { type: Date, default: Date.now }
+    timestamp: { type: Date, default: Date.now },
+    attachments: [{
+      name: String,
+      url: String,
+      type: String,
+      size: Number
+    }]
   }]
 });
 
