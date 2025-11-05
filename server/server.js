@@ -51,7 +51,7 @@ app.use("/contact", contactRoutes);
 app.use("/about-us", aboutUsRoutes);
 app.use("/footer", footerRoutes);
 app.use("/hero", heroRoutes);
-app.use("/trusted-companies", trustedCompaniesRoutes);
+app.use("/api/trusted-companies", trustedCompaniesRoutes);
 app.use("/about-company", aboutCompanyRoutes);
 app.use("/services", servicesRoutes);
 app.use("/why-choose-us", whyChooseUsRoutes);

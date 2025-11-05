@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 
 export default function TrustedCompanies() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const [companiesData, setCompaniesData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchCompaniesData();
@@ -11,6 +13,7 @@ export default function TrustedCompanies() {
 
   const fetchCompaniesData = async () => {
     try {
+      setLoading(true);
       const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
       const response = await fetch(`${apiUrl}/api/trusted-companies`);
       const data = await response.json();
@@ -19,13 +22,14 @@ export default function TrustedCompanies() {
       }
     } catch (error) {
       console.error('Error fetching companies data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const companies = companiesData?.companies?.sort((a, b) => a.order - b.order) || [
-    { name: 'Microsoft', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/512px-Microsoft_logo.svg.png' },
-    { name: 'Google', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/512px-Google_2015_logo.svg.png' }
-  ];
+  const companies = companiesData?.companies?.sort((a, b) => a.order - b.order) || [];
+  const title = companiesData?.title || "Trusted by Leading Companies";
+  const subtitle = companiesData?.subtitle || "We partner with industry leaders to deliver exceptional solutions that drive digital transformation";
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -49,6 +53,26 @@ export default function TrustedCompanies() {
       if (section) observer.unobserve(section);
     };
   }, []);
+
+  if (loading) {
+    return (
+      <section id="trusted-companies" className="relative py-20 bg-gradient-to-br from-gray-50 via-white to-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="animate-pulse">
+              <div className="h-12 bg-gray-300 rounded-lg w-3/4 mx-auto mb-4"></div>
+              <div className="h-6 bg-gray-200 rounded-lg w-1/2 mx-auto mb-8"></div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+                {[...Array(12)].map((_, i) => (
+                  <div key={i} className="h-24 bg-gray-200 rounded-2xl"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="trusted-companies" className="relative py-20 bg-gradient-to-br from-gray-50 via-white to-gray-100 overflow-hidden">
@@ -77,10 +101,10 @@ export default function TrustedCompanies() {
             }`}
           >
             <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Trusted by <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-purple-600">Leading Companies</span>
+              {title.split(' ').slice(0, -2).join(' ')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-purple-600">{title.split(' ').slice(-2).join(' ')}</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              We partner with industry leaders to deliver exceptional solutions that drive digital transformation
+              {subtitle}
             </p>
           </div>
         </div>
@@ -112,6 +136,10 @@ export default function TrustedCompanies() {
                     style={{
                       filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
                     }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `https://ui-avatars.com/api/?name=${company.name}&background=random&size=128`;
+                    }}
                   />
                 </div>
 
@@ -133,7 +161,7 @@ export default function TrustedCompanies() {
         {/* Statistics Row */}
         <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { number: '50+', label: 'Trusted Partners' },
+            { number: `${companies.length}+`, label: 'Trusted Partners' },
             { number: '3+', label: 'Decades of Excellence' },
             { number: '100%', label: 'Client Satisfaction' }
           ].map((stat, index) => (
